@@ -6,7 +6,6 @@ from flask_httpauth import HTTPBasicAuth
 
 import json
 import os
-from config import basedir
 
 
 application = Flask(__name__)
