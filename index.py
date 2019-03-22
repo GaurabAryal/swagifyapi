@@ -3,7 +3,7 @@
 from flask import abort, request, jsonify, g, url_for
 from flask_httpauth import HTTPBasicAuth
 from sqlalchemy.exc import IntegrityError
-from models.user import User
+from models.User import User
 from app import db, application
 
 import json
