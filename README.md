@@ -5,6 +5,12 @@ export SECRET_KEY="foobar"
 export DATABASE_URL="postgresql://localhost/swagify"
 ```
 
+To run the api server, use the following command:
+
+```
+python manage.py runserver
+```
+
 
 To perform DB migrations:
 

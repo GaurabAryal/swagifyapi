@@ -1,3 +1,4 @@
+import datetime
 from app import db, application
 from passlib.apps import custom_app_context as pwd_context
 from itsdangerous import (TimedJSONWebSignatureSerializer
@@ -10,8 +11,18 @@ class User(db.Model):
     __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(32), index=True)
+    email = db.Column(db.String(255), unique=True)
+    username = db.Column(db.String(255), unique=True)
+    first_name = db.Column(db.String(100))
+    last_name = db.Column(db.String(100))
     password_hash = db.Column(db.String(128))
+    created_at = db.Column(db.DateTime, default=datetime.datetime.utcnow())
+    active = db.Column(db.Boolean)
+
+    def __init__(self, email):
+        self.email = email
+        self.username = email
+        self.active = True
 
     def hash_password(self, password):
         self.password_hash = pwd_context.encrypt(password)
@@ -19,7 +30,7 @@ class User(db.Model):
     def verify_password(self, password):
         return pwd_context.verify(password, self.password_hash)
 
-    def generate_auth_token(self, expiration=600):
+    def generate_auth_token(self, expiration=7200):
         s = Serializer(application.config['SECRET_KEY'], expires_in=expiration)
         return s.dumps({'id': self.id})
 
