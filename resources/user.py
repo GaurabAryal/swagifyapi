@@ -15,14 +15,12 @@ auth = HTTPBasicAuth()
 def new_user():
     email = request.args.get('email')
     password = request.args.get('password')
-    first_name = request.args.get('first_name')
-    last_name = request.args.get('last_name')
+    name = request.args.get('name')
     if email is None or password is None or first_name is None:
         abort(400) # missing arguments
     user = User(email)
     user.hash_password(password)
-    user.first_name = first_name
-    user.last_name = last_name
+    user.name = name
 
     db.session.add(user)
     try:
