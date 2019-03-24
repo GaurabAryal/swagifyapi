@@ -17,6 +17,7 @@ def new_user():
     password = request.args.get('password')
     name = request.args.get('name')
     if email is None or password is None or name is None:
+        print("foobar")
         abort(400) # missing arguments
     user = User(email)
     user.hash_password(password)
@@ -27,7 +28,7 @@ def new_user():
         db.session.commit()
     except IntegrityError:
         return jsonify(message="Email already signed up!"), 409
-    return jsonify({'email': user.email, 'first_name': user.first_name, 'last_name': user.last_name}, 201)
+    return jsonify({'data': 'Successfully registered!'}), 201
 
 
 @_user.route('/api/resource')
