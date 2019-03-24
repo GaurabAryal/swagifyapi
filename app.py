@@ -11,6 +11,10 @@ application.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 
 db = SQLAlchemy(application)
 
+# Import exception to remove circular dependency
+from resources.user import _user
+
+application.register_blueprint(_user)
 
 
 if __name__ == "__main__":
