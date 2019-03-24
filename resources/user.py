@@ -16,7 +16,7 @@ def new_user():
     email = request.args.get('email')
     password = request.args.get('password')
     name = request.args.get('name')
-    if email is None or password is None or first_name is None:
+    if email is None or password is None or name is None:
         abort(400) # missing arguments
     user = User(email)
     user.hash_password(password)
