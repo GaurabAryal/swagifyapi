@@ -1,14 +1,11 @@
 # Auth example: https://github.com/miguelgrinberg/REST-auth/blob/master/api.py
 from app import db
 from flask import abort, request, jsonify, g, Blueprint
-from flask_httpauth import HTTPBasicAuth
 from sqlalchemy.exc import IntegrityError
 from models.User import User
+from resources.security import auth
 
 _user = Blueprint('_user', __name__)
-
-
-auth = HTTPBasicAuth()
 
 
 @_user.route('/api/users', methods=['POST'])
@@ -40,17 +37,6 @@ def get_resource():
 @auth.login_required
 def get_auth_token():
     token = g.user.generate_auth_token()
-    return jsonify({'token': token.decode('ascii')}), 200
+    return jsonify({'token': token.decode('ascii'), 'name': g.user.name}), 200
 
 
-@auth.verify_password
-def verify_password(username_or_token, password):
-    # first try to authenticate by token
-    user = User.verify_auth_token(username_or_token)
-    if not user:
-        # try to authenticate with username/password
-        user = User.query.filter_by(username=username_or_token).first()
-        if not user or not user.verify_password(password):
-            return False
-    g.user = user
-    return True
