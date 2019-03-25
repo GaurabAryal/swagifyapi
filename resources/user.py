@@ -17,7 +17,6 @@ def new_user():
     password = request.args.get('password')
     name = request.args.get('name')
     if email is None or password is None or name is None:
-        print("foobar")
         abort(400) # missing arguments
     user = User(email)
     user.hash_password(password)
@@ -37,19 +36,11 @@ def get_resource():
     return jsonify({'data': 'Hello, %s!' % g.user.username})
 
 
-@_user.route('/api/users/<int:id>')
-def get_user(id):
-    user = User.query.get(id)
-    if not user:
-        abort(400)
-    return jsonify({'username': user.username})
-
-
 @_user.route('/api/token', methods=['get'])
 @auth.login_required
 def get_auth_token():
     token = g.user.generate_auth_token()
-    return jsonify({ 'token': token.decode('ascii') })
+    return jsonify({'token': token.decode('ascii')}), 200
 
 
 @auth.verify_password
