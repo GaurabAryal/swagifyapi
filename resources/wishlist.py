@@ -34,5 +34,12 @@ def get_items():
     query = db.session.query(Item).\
         join(WishList, WishList.item_id == Item.id).\
         filter(WishList.user_id == g.user.id)
+    items = {}
     for row in query:
-        print(row.name)
+        items['name'] = row.name
+        items['url'] = row.url
+        items['website_name'] = row.website_url
+        items['price'] = row.price
+        items['image_url'] = row.image_url
+    print(items)
+    jsonify({'data': items}), 200

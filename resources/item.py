@@ -31,3 +31,22 @@ def add_item():
         return jsonify(message="Item with this URL already exists!"), 409
     return jsonify({'data': 'Successfully added Item!'}), 201
 
+
+@item.route('/api/item/', methods=['GET'])
+def search_item():
+    name = request.args.get('name')
+    query = db.session.query(Item).\
+        filter(Item.name.like('%' + name + '%')).\
+        all()
+    # query = query.order_by(Item.name).all()
+    items = {}
+    print(len(query))
+    for ind, row in enumerate(query):
+        items[ind] = {}
+        items[ind]['name'] = row.name
+        items[ind]['url'] = row.url
+        items[ind]['website_name'] = row.website_name
+        items[ind]['price'] = row.price
+        items[ind]['image_url'] = row.image
+
+    return jsonify({'data': items}), 200
