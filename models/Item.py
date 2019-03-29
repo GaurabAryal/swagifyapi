@@ -1,5 +1,5 @@
 import datetime
-from app import db, application
+from app import db
 
 
 class Item(db.Model):
