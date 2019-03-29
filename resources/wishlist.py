@@ -36,6 +36,7 @@ def get_items():
         filter(WishList.user_id == g.user.id)
     items = {}
     for row in query:
+        items['id'] = row.id
         items['name'] = row.name
         items['url'] = row.url
         items['website_name'] = row.website_url

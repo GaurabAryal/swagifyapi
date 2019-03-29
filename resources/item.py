@@ -43,6 +43,7 @@ def search_item():
     print(len(query))
     for ind, row in enumerate(query):
         items[ind] = {}
+        items[ind]['id'] = row.id
         items[ind]['name'] = row.name
         items[ind]['url'] = row.url
         items[ind]['website_name'] = row.website_name
