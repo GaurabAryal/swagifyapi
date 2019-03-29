@@ -36,7 +36,7 @@ def add_item():
 def search_item():
     name = request.args.get('name')
     query = db.session.query(Item).\
-        filter(Item.name.like('%' + name + '%')).\
+        filter(Item.name.ilike('%' + name + '%')).\
         all()
     # query = query.order_by(Item.name).all()
     items = {}
