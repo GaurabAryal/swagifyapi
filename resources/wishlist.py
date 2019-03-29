@@ -16,7 +16,7 @@ def add_item(item_id):
     _wishlist = WishList(item_id)
     _wishlist.item_id = item_id
     _wishlist.user_id = g.user.id
-    record_exists = db.session.query(User.id).filter_by(user_id=g.user.id, item_id=item_id).scalar() is not None
+    record_exists = db.session.query(WishList).filter_by(user_id=g.user.id, item_id=item_id).scalar() is not None
     if record_exists:
         return jsonify(message="The item was already in the database"), 409
 
@@ -25,7 +25,7 @@ def add_item(item_id):
         db.session.commit()
     except SQLAlchemyError:
         return jsonify(message="Error saving to database."), 500
-    return jsonify({'data': 'Successfully added item to wish list!'}), 201
+    return jsonify({'data': 'Successfully added item to wishlist!'}), 201
 
 
 @wishlist.route('/api/wishlist', methods=['GET'])
@@ -43,3 +43,19 @@ def get_items():
         items['image_url'] = row.image_url
     print(items)
     jsonify({'data': items}), 200
+
+
+@wishlist.route('/api/wishlist/<int:_item_id>', methods=['DELETE'])
+@auth.login_required
+def delete_item(_item_id):
+    print(g.user.id)
+    WishList.query.filter_by(item_id=_item_id, user_id=g.user.id).delete()
+    try:
+        db.session.commit()
+    except SQLAlchemyError as e:
+        error = str(e.__dict__['orig'])
+        print(error)
+        return jsonify(message="Error saving to database."), 500
+
+    return jsonify({'data': 'Successfully deleted item from wishlist!'}), 201
+
