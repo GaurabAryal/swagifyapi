@@ -39,7 +39,7 @@ def get_items():
         items['id'] = row.id
         items['name'] = row.name
         items['checkoutUrl'] = row.url
-        items['brand'] = row.website_url
+        items['brand'] = row.website_name
         items['price'] = row.price
         items['imageUrl'] = row.image_url
     print(items)
