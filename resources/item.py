@@ -38,16 +38,16 @@ def search_item():
     query = db.session.query(Item).\
         filter(Item.name.ilike('%' + name + '%')).\
         all()
+    res = []
     # query = query.order_by(Item.name).all()
-    items = {}
-    print(len(query))
     for ind, row in enumerate(query):
-        items[ind] = {}
-        items[ind]['id'] = row.id
-        items[ind]['name'] = row.name
-        items[ind]['url'] = row.url
-        items[ind]['website_name'] = row.website_name
-        items[ind]['price'] = row.price
-        items[ind]['image_url'] = row.image
+        _item = {}
+        _item['id'] = row.id
+        _item['name'] = row.name
+        _item['url'] = row.url
+        _item['website_name'] = row.website_name
+        _item['price'] = row.price
+        _item['image_url'] = row.image
+        res.append(_item)
 
-    return jsonify({'data': items}), 200
+    return jsonify({'data': res}), 200
