@@ -44,10 +44,10 @@ def search_item():
         _item = {}
         _item['id'] = row.id
         _item['name'] = row.name
-        _item['url'] = row.url
-        _item['website_name'] = row.website_name
+        _item['checkoutUrl'] = row.url
+        _item['brand'] = row.website_name
         _item['price'] = row.price
-        _item['image_url'] = row.image
+        _item['imageUrl'] = row.image
         res.append(_item)
 
     return jsonify({'data': res}), 200

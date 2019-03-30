@@ -38,10 +38,10 @@ def get_items():
     for row in query:
         items['id'] = row.id
         items['name'] = row.name
-        items['url'] = row.url
-        items['website_name'] = row.website_url
+        items['checkoutUrl'] = row.url
+        items['brand'] = row.website_url
         items['price'] = row.price
-        items['image_url'] = row.image_url
+        items['imageUrl'] = row.image_url
     print(items)
     jsonify({'data': items}), 200
 
