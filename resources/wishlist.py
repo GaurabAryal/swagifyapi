@@ -41,7 +41,7 @@ def get_items():
         items['checkoutUrl'] = row.url
         items['brand'] = row.website_name
         items['price'] = row.price
-        items['imageUrl'] = row.image_url
+        items['imageUrl'] = row.image
     print(items)
     jsonify({'data': items}), 200
 
