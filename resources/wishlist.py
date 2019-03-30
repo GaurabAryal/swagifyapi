@@ -34,15 +34,18 @@ def get_items():
     query = db.session.query(Item).\
         join(WishList, WishList.item_id == Item.id).\
         filter(WishList.user_id == g.user.id)
-    items = {}
-    for row in query:
-        items['id'] = row.id
-        items['name'] = row.name
-        items['checkoutUrl'] = row.url
-        items['brand'] = row.website_name
-        items['price'] = row.price
-        items['imageUrl'] = row.image
-    return jsonify({'data': items}), 200
+    res = []
+    # query = query.order_by(Item.name).all()
+    for ind, row in enumerate(query):
+        _item = {}
+        _item['id'] = row.id
+        _item['name'] = row.name
+        _item['checkoutUrl'] = row.url
+        _item['brand'] = row.website_name
+        _item['price'] = row.price
+        _item['imageUrl'] = row.image
+        res.append(_item)
+    return jsonify({'data': res}), 200
 
 
 @wishlist.route('/api/wishlist/<int:_item_id>', methods=['DELETE'])
