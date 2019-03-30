@@ -42,8 +42,7 @@ def get_items():
         items['brand'] = row.website_name
         items['price'] = row.price
         items['imageUrl'] = row.image
-    print(items)
-    jsonify({'data': items}), 200
+    return jsonify({'data': items}), 200
 
 
 @wishlist.route('/api/wishlist/<int:_item_id>', methods=['DELETE'])
