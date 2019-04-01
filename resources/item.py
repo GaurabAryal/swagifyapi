@@ -55,7 +55,7 @@ def search_item():
 
 
 @item.route('/api/item/<int:item_id>', methods=['DELETE'])
-def search_item(item_id):
+def delete_item(item_id):
     Item.query.filter_by(id=item_id).delete()
     try:
         db.session.commit()
