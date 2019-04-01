@@ -51,7 +51,6 @@ def get_items():
 @wishlist.route('/api/wishlist/<int:_item_id>', methods=['DELETE'])
 @auth.login_required
 def delete_item(_item_id):
-    print(g.user.id)
     WishList.query.filter_by(item_id=_item_id, user_id=g.user.id).delete()
     try:
         db.session.commit()

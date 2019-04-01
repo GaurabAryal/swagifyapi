@@ -2,6 +2,7 @@
 from app import db
 from flask import abort, request, jsonify, g, Blueprint
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import SQLAlchemyError
 from models.Item import Item
 from resources.security import auth
 
@@ -51,3 +52,14 @@ def search_item():
         res.append(_item)
 
     return jsonify({'data': res}), 200
+
+
+@item.route('/api/item/<int:item_id>', methods=['DELETE'])
+def search_item(item_id):
+    Item.query.filter_by(id=item_id).delete()
+    try:
+        db.session.commit()
+    except SQLAlchemyError as e:
+        return jsonify(message="Error saving to database."), 500
+
+    return jsonify({'data': 'Successfully deleted item!'}), 201
