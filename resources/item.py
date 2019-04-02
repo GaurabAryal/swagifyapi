@@ -29,7 +29,8 @@ def add_item():
     try:
         db.session.commit()
     except IntegrityError:
-        return jsonify(message="Item with this URL already exists!"), 409
+        existing_item = Item.query.filter_by(url=url).first()
+        return jsonify({'data': 'Successfully added Item!', 'id': existing_item.id}), 409
     return jsonify({'data': 'Successfully added Item!'}), 201
 
 
@@ -52,6 +53,19 @@ def search_item():
         res.append(_item)
 
     return jsonify({'data': res}), 200
+
+
+@item.route('/api/item/<int:item_id>', methods=['PUT'])
+def delete_item(item_id):
+    _item = Item.query.filter_by(id=item_id).first()
+    _item.price = float(request.args.get('price'))
+
+    try:
+        db.session.commit()
+    except SQLAlchemyError as e:
+        return jsonify(message="Error saving to database."), 500
+
+    return jsonify({'data': 'Successfully updated item!'}), 201
 
 
 @item.route('/api/item/<int:item_id>', methods=['DELETE'])
