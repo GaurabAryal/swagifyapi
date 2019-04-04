@@ -33,7 +33,7 @@ def add_item():
     except IntegrityError:
         db.session.rollback()
         existing_item = _item.query.filter_by(url=url).first()
-        return jsonify({'data': 'Failed to add Item!', 'item_id': existing_item.id}), 409
+        return jsonify({'data': 'Failed to add Item!', 'item_id': existing_item.id, 'price': existing_item.price}), 409
     return jsonify({'data': 'Successfully added Item!'}), 201
 
 

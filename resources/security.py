@@ -9,7 +9,6 @@ auth = HTTPBasicAuth()
 
 @auth.verify_password
 def verify_password(username_or_token, password):
-    print(username_or_token + "   " + password + "Username and passs debug!")
     # first try to authenticate by token
     user = User.verify_auth_token(username_or_token)
     if not user:
