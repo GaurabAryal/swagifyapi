@@ -4,6 +4,8 @@ from flask import abort, request, jsonify, g, Blueprint
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import SQLAlchemyError
 from models.Item import Item
+from models.Wishlist import WishList
+from models.User import User
 from resources.security import auth
 
 item = Blueprint('item', __name__)
@@ -29,8 +31,9 @@ def add_item():
     try:
         db.session.commit()
     except IntegrityError:
-        existing_item = Item.query.filter_by(url=url).first()
-        return jsonify({'data': 'Successfully added Item!', 'id': existing_item.id}), 409
+        db.session.rollback()
+        existing_item = _item.query.filter_by(url=url).first()
+        return jsonify({'data': 'Failed to add Item!', 'item_id': existing_item.id}), 409
     return jsonify({'data': 'Successfully added Item!'}), 201
 
 
@@ -56,7 +59,7 @@ def search_item():
 
 
 @item.route('/api/item/<int:item_id>', methods=['PUT'])
-def delete_item(item_id):
+def updates_item(item_id):
     _item = Item.query.filter_by(id=item_id).first()
     _item.price = float(request.args.get('price'))
 
@@ -65,7 +68,15 @@ def delete_item(item_id):
     except SQLAlchemyError as e:
         return jsonify(message="Error saving to database."), 500
 
-    return jsonify({'data': 'Successfully updated item!'}), 201
+    query = db.session.query(User).\
+        join(WishList, WishList.user_id == User.id).\
+        filter(WishList.item_id == item_id)
+
+    email_array = []
+    for row in query:
+        email_array.append(row.email)
+
+    return jsonify({'data': 'Successfully updated item!', 'emails': email_array}), 201
 
 
 @item.route('/api/item/<int:item_id>', methods=['DELETE'])

@@ -3,7 +3,6 @@ from app import db
 from flask import abort, request, jsonify, g, Blueprint
 from sqlalchemy.exc import SQLAlchemyError
 from models.Wishlist import WishList
-from models.User import User
 from models.Item import Item
 from resources.security import auth
 

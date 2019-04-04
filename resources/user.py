@@ -23,6 +23,7 @@ def new_user():
     try:
         db.session.commit()
     except IntegrityError:
+        db.session.rollback()
         return jsonify(message="Email already signed up!"), 409
     return jsonify({'data': 'Successfully registered!'}), 201
 
